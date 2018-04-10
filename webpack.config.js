@@ -1,4 +1,6 @@
-const htmlPlugin =  require('html-webpack-plugin');
+const htmlPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+
 module.exports = {
     entry: __dirname + "/src/main.js",
     output: {
@@ -46,8 +48,8 @@ module.exports = {
                         //name: '[path][name].[ext]',
                         name: '[name].[ext]', //最后生成的文件名是 output.path+ outputPaht+ name，[name],[ext],[path]表示原来的文件名字，扩展名，路径
                         //useRelativePath:true,
-                        outputPath: 'img/' // 后面的/不能少
-                    }  
+                        outputPath: 'img/' // 后面的/不能少生成图片的文件名
+                    }
                 },
             },
             {
@@ -56,18 +58,23 @@ module.exports = {
                     loader: "html-loader",
                     options: {
                         minimize: true
-                    }  
+                    }
                 },
             }
         ]
     },
-    plugins:[
+    plugins: [
         new htmlPlugin({
-            minify:{
-                removeAttributeQuotes:true
+            hash: false,
+            minify: {
+                removeAttributeQuotes: false //生成的index是否去掉引号
             },
-            hash:true,
-            template:'./src/index.html'
+            template: './src/index.html', //指定生成模板
+            htmlWebpackPlugin: {
+                files: {
+                    js: ['bundle.js'] //生成文件里插入JS文件
+                }
+            }
         })
     ]
 }
